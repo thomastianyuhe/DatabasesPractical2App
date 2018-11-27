@@ -16,22 +16,6 @@ public class PurchaseRecord implements Model{
         this.purchaseDate = purchaseDate;
     }
 
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Date getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public float getPurchasePrice() {
-        return purchasePrice;
-    }
-
     public static String[] getFields(){
         return fields;
     }

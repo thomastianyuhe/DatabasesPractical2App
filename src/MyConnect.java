@@ -7,9 +7,9 @@ import java.sql.Date;
 
 public class MyConnect {
 
-    static final String DB_URL = "jdbc:mysql://th61.host.cs.st-andrews.ac.uk:3306/th61_cs3101_test1_db";
-    static final String USERNAME = "th61";
-    static final String PASSWORD = "v5e3V.Y0Qf1MKq";
+    static final private String DB_URL = "jdbc:mysql://th61.host.cs.st-andrews.ac.uk:3306/th61_cs3101_test1_db";
+    static final private String USERNAME = "th61";
+    static final private String PASSWORD = "v5e3V.Y0Qf1MKq";
 
     public static Connection makeConnection(){
         Connection connection = null;
@@ -57,8 +57,6 @@ public class MyConnect {
                 audioBooks.add(audioBook);
             }
             audioBookResults.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -107,8 +105,6 @@ public class MyConnect {
                 reviews.add(review);
             }
             reviewResults.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -148,8 +144,6 @@ public class MyConnect {
                 publishers.add(publisher);
             }
             publisherResults.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -195,8 +189,6 @@ public class MyConnect {
                 authors.add(author);
             }
             authorResults.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -228,8 +220,6 @@ public class MyConnect {
                 passwordList.add(passwordResult.getString("password"));
             }
             passwordResult.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -265,8 +255,6 @@ public class MyConnect {
                 customerIdList.add(passwordResult.getInt("person_ID"));
             }
             passwordResult.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -284,7 +272,7 @@ public class MyConnect {
             }
         }
         if(customerIdList.size() != 1){
-            //should only have one password
+            //should only have one customer id
             return -1;
         }
         return customerIdList.get(0);
@@ -309,8 +297,6 @@ public class MyConnect {
                 purchaseRecordList.add(purchaseRecord);
             }
             purchaseRecordResult.close();
-        }catch(SQLException e){
-            e.printStackTrace();
         }catch(Exception e){
             e.printStackTrace();
         }finally{

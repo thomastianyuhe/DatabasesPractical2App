@@ -4,10 +4,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class MyLoginGUI extends JFrame implements ActionListener {
-    JLabel loginLabel, userNameLabel, passwordLabel;
-    JTextField usernameField;
-    JButton loginButton;
-    JPasswordField passwordField;
+    private JLabel loginLabel, userNameLabel, passwordLabel;
+    private JTextField usernameField;
+    private JButton loginButton;
+    private JPasswordField passwordField;
     MyLoginGUI() {
         JFrame frame = new JFrame();
         loginLabel = new JLabel();
@@ -34,6 +34,7 @@ public class MyLoginGUI extends JFrame implements ActionListener {
         frame.add(loginButton);
 
         frame.setSize(600, 300);
+        //fix the size of the frame
         frame.setResizable(false);
         frame.setLayout(null);
         frame.setVisible(true);
@@ -48,7 +49,6 @@ public class MyLoginGUI extends JFrame implements ActionListener {
         {
             int customerId = MyConnect.getCustomerId(username);
             new MyGUI(customerId);
-            this.dispose();
         }
         else
         {

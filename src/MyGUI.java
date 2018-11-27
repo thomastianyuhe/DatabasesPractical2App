@@ -83,7 +83,7 @@ public class MyGUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         if(event.getSource() instanceof JMenuItem){
-            //Popup menu action
+            //for the popup menu
             JMenuItem menu = (JMenuItem) event.getSource();
             if (menu == menuItemCheckReview) {
                 checkReview();
@@ -95,7 +95,7 @@ public class MyGUI extends JFrame implements ActionListener {
                 backToMainPage();
             }
         }else{
-            //Button pressed action
+            //when the button is pressed
             checkPurchaseRecord();
         }
     }
@@ -105,7 +105,6 @@ public class MyGUI extends JFrame implements ActionListener {
         String ISBN = (String) table.getModel().getValueAt(row, ISBN_COLUMN_INDEX);
         System.out.println(ISBN);
         ArrayList<Model> reviewArrayList = MyConnect.getReviewsForCertainAudioBook(ISBN);
-        String[] reviewFields = Review.getFields();
         if(reviewArrayList.isEmpty()){
             JOptionPane.showMessageDialog(null, "There is no review for the selected audio book.");
         }else{
@@ -158,9 +157,7 @@ public class MyGUI extends JFrame implements ActionListener {
     }
 
     private class TableMouseListener extends MouseAdapter {
-
         private JTable table;
-
         public TableMouseListener(JTable table) {
             this.table = table;
         }
@@ -213,11 +210,6 @@ public class MyGUI extends JFrame implements ActionListener {
         }
 
         private void adjustRowHeight(JTable table, int row, int column) {
-            //The trick to get this to work properly is to set the width of the column to the
-            //textarea. The reason for this is that getPreferredSize(), without a width tries
-            //to place all the text in one line. By setting the size with the with of the column,
-            //getPreferredSize() returns the proper height which the row should have in
-            //order to make room for the text.
             int cWidth = table.getTableHeader().getColumnModel().getColumn(column).getWidth();
             setSize(new Dimension(cWidth, 1000));
             int prefH = getPreferredSize().height;
@@ -241,13 +233,14 @@ public class MyGUI extends JFrame implements ActionListener {
         }
     }
 
-
+    //convert model arraylist into String[][] which can then be used by the table
     private String[][] convertToTableData(ArrayList<Model> models){
         String[][] tableData = models.stream().map(a -> a.toStringArrayFormat()).toArray(String[][]::new);
         return tableData;
     }
 
 
+    //update the content of the table
     private void changeTableData(String[][] data, String[] fields){
         tableData.setDataVector(data,fields);
         table.setModel(tableData);
@@ -259,6 +252,4 @@ public class MyGUI extends JFrame implements ActionListener {
     public static void main(String[] args){
         new MyGUI(7);
     }
-
-
 }

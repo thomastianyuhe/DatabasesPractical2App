@@ -25,34 +25,6 @@ public class AudioBook implements Model{
         this.publisherName = publisherName;
     }
 
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Integer getAgeRating() {
-        return ageRating;
-    }
-
-    public String getNarrator() {
-        return narrator;
-    }
-
-    public Float setPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public Date getPublishedDate() {
-        return publishedDate;
-    }
-
-    public String getPublisherName() {
-        return publisherName;
-    }
-
     public static String[] getFields(){
         return fields;
     }

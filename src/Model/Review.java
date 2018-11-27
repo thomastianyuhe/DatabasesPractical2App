@@ -18,30 +18,6 @@ public class Review implements Model{
         this.verified = verified;
     }
 
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getCustomerID() {
-        return customer;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
     public static String[] getFields(){
         return fields;
     }

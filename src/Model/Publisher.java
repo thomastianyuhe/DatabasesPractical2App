@@ -25,38 +25,6 @@ public class Publisher implements Model{
         this.establishedDate = establishedDate;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getBuilding() {
-        return building;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public Date getEstablishedDate() {
-        return establishedDate;
-    }
-
     public static String[] getFields(){
         return fields;
     }

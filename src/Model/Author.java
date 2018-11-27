@@ -14,18 +14,6 @@ public class Author implements Model{
         this.biography = biography;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getBiography() {
-        return biography;
-    }
-
     public static String[] getFields() {
         return fields;
     }
