@@ -1,0 +1,331 @@
+CS3101
+mysql -u th61 -p -h th61.host.cs.st-andrews.ac.uk
+v5e3V.Y0Qf1MKq
+
+drop database if exists th61_cs3101_test1_db;
+create database th61_cs3101_test1_db;
+use th61_cs3101_test1_db;
+
+create table person (
+	ID int not null auto_increment,
+	forename varchar(20) not null,
+	middle_initials varchar(20),
+	surname varchar(20) not null,
+	date_of_birth date not null,
+primary key (ID));
+
+create table contributor (
+	person_ID int,
+	biography varchar(1000),
+primary key (person_ID),
+foreign key (person_ID) references person(ID));
+
+create table customer (
+	person_ID int,
+	email_address varchar(50) not null unique,
+	password varchar(20) not null,
+primary key (person_ID),
+foreign key (person_ID) references person(ID));
+
+create table phone_number (
+	customer_ID int,
+	phone_number varchar(20),
+	primary key (customer_ID, phone_number),
+	foreign key (customer_ID) references customer(person_ID));
+
+create table publisher (
+	name varchar(30) not null,
+	building varchar(50),
+	street varchar(50),
+	city varchar(50),
+	country varchar(20),
+	postcode varchar(20),
+	phone_number varchar(20) not null,
+	established_date date not null,
+	primary key (name));
+
+create table audiobook (
+	ISBN varchar(50),
+	title varchar(50) not null,
+	narrator_id int,
+	running_time time not null,
+	age_rating int,
+	purchase_price numeric(5,2) not null,
+	publisher_name varchar(30) not null,
+	published_date date not null,
+	audiofile mediumblob,
+	primary key (ISBN),
+	foreign key (narrator_id) references contributor(person_ID),
+	foreign key (publisher_name) references publisher(name));
+
+
+create table chapter (
+	ISBN varchar(50),
+	number int,
+	title varchar(100) not null,
+	start time not null,
+	primary key (ISBN, number),
+	foreign key (ISBN) references audiobook(ISBN));
+
+create table audiobook_authors (
+	contributor_ID int,
+	ISBN varchar(50),
+	primary key (contributor_ID, ISBN),
+	foreign key (contributor_ID) references contributor(person_ID),
+	foreign key (ISBN) references audiobook(ISBN));
+
+create table audiobook_purchases (
+	customer_ID int,
+	ISBN varchar(50),
+	purchase_date datetime not null,
+	primary key (customer_ID, ISBN),
+	foreign key (customer_ID) references customer(person_ID),
+	foreign key (ISBN) references audiobook(ISBN));
+
+create table audiobook_reviews (
+	customer_ID int,
+	ISBN varchar(50),
+	rating int,
+	title varchar(50),
+	comment varchar(1000),
+	verified boolean,
+	primary key (customer_ID, ISBN),
+	foreign key (customer_ID) references customer(person_ID),
+	foreign key (ISBN) references audiobook(ISBN));
+
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Bob', 'B A', 'Bobson', '2009-12-31');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Bob', 'A B', 'Bobson', '1978-10-23');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Stephen', null, 'Fry', '1957-08-24');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Hugh', null, 'Laurie', '1959-06-10');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Ruth', null, 'Letham', '1978-11-23');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Simon', null, 'Prebble', '1942-02-13');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('JK', null, 'Rowling', '1965-07-31');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Newton', 'A F', 'Scamander', '1897-02-24');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Pippa', 'A', 'Smith', '2005-01-01');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Jon', 'Q', 'Spellbad', '2007-01-01');
+insert into person (forename, middle_initials, surname, date_of_birth) values ('Jonathan', null, 'Swift', '1667-11-30');
+
+insert into contributor (person_ID, biography) values (3, 'An English comedian, actor, writer, presenter, and activist.');
+insert into contributor (person_ID, biography) values (4, 'An English actor, musician, comedian, and writer.');
+insert into contributor (person_ID, biography) values (6, 'An English actor and narrator. Initially a stage actor, he has a wide-ranging career in television drama, was a game show announcer in Britain, and a voice-over narrator for television, and film. In recent years he has narrated a large number of audio books and received an Audie (Audio book Oscar) in 2010.');
+insert into contributor (person_ID, biography) values (7, 'After finishing the first book and whilst training as a teacher, Harry Potter was accepted for publication by Bloomsbury. Harry Potter and the Philosopher’s Stone quickly became a bestseller on publication in 1997. As the book was translated into other languages, Harry Potter started spreading round the globe – and J.K. Rowling was soon receiving thousands of letters from fans.');
+insert into contributor (person_ID, biography) values (8, 'Famed expert in the field of Magizoology.');
+insert into contributor (person_ID, biography) values (11, 'Irish author, clergyman and satirist Jonathan Swift received a bachelor\'s degree from Trinity College and then worked as a statesman\'s assistant. Eventually, he became dean of St. Patrick\'s Cathedral in Dublin.');
+
+insert into customer (person_ID, email_address, password) values (1, 'bob_jnr@bobson.com', 'password1');
+insert into customer (person_ID, email_address, password) values (2, 'bob_snr@bobson.com', 'password2');
+insert into customer (person_ID, email_address, password) values (3, 'sfry@email.com', 'password3');
+insert into customer (person_ID, email_address, password) values (4, 'hugh@laurie.com', 'password4');
+insert into customer (person_ID, email_address, password) values (5, 'ruth@letham.com', 'password5');
+insert into customer (person_ID, email_address, password) values (7, 'jk@rowling.com', 'password7');
+insert into customer (person_ID, email_address, password) values (9, 'pippa.smith@email.com', 'password9');
+insert into customer (person_ID, email_address, password) values (10, 'jon@spellbad.com', 'password10');
+
+insert into phone_number (customer_ID, phone_number) values (5, '02222 111 333');
+insert into phone_number (customer_ID, phone_number) values (9, '01111 222 333');
+insert into phone_number (customer_ID, phone_number) values (9, '07777 222 333');
+
+insert into publisher values ('HighBridge Audio', '270', 'Skipjack Road', 'Prince Frederick', 'USA', 'MD 20678', '1-800-755-8532', '1901-01-01');
+insert into publisher values ('Penguin Books Ltd', '80', 'Strand', 'London', 'UK', 'WC2R 0RL', '861590', '1981-01-01');
+insert into publisher values ('Pottermore Publishing', 'PO Box 7828', null, 'London', 'UK', 'W1A 4GE', '12345', '2011-07-31');
+insert into publisher values ('Random House AudioBooks', '20', 'Vauxhall Bridge Road', 'London', 'UK', 'SW1V2SA', '+4402078408400', '1928-09-01');
+
+insert into audiobook values ('860-1404211171', 'Fantastic Beasts and Where to Find Them', 3, '01:45:00', null, 12.00, 'Pottermore Publishing', '2017-03-14', null);
+insert into audiobook values ('978-0393957242', 'Gulliver\'s Travels', 4, '05:35:00', null, 38.00, 'Penguin Books Ltd', '2012-05-12', null);
+insert into audiobook values ('978-1408855652', 'Harry Potter and the Philosopher\'s Stone', 3, '08:44:00', null, 7.19, 'Pottermore Publishing', '2014-09-01', null);
+insert into audiobook values ('978-0099457046', 'Moab Is My Washpot', 3, '11:33:00', 12, 22.00, 'Random House AudioBooks', '2017-01-01', null);
+insert into audiobook values ('978-1611749731', 'The Gun Seller', 6, '10:45:00', 16, 16.00, 'HighBridge Audio', '2012-10-16', null);
+
+insert into chapter values ('978-0393957242', 1, 'Part I: A Voyage to Lilliput', '00:00:00');
+insert into chapter values ('978-0393957242', 2, 'Part II: A Voyage to Brobdingnag', '01:40:07');
+insert into chapter values ('978-0393957242', 3, 'Part III: A Voyage to Laputa, Balnibarbi, Luggnagg, Glubbdubdrib and Japan', '03:01:09');
+insert into chapter values ('978-0393957242', 4, 'Part IV: A Voyage to the Land of the Houyhnhnms', '04:22:05');
+insert into chapter values ('978-1408855652', 1, 'The Boy Who Lived', '00:00:00');
+insert into chapter values ('978-1408855652', 2, 'The Vanishing Glass', '00:35:03');
+insert into chapter values ('978-1408855652', 3, 'The Letters from No One', '01:07:27');
+insert into chapter values ('978-1408855652', 4, 'The Keeper of Keys', '01:38:01');
+insert into chapter values ('978-1408855652', 5, 'Diagon Alley', '02:08:25');
+insert into chapter values ('978-1408855652', 6, 'The Journey from Platform Nine and Three-Quarters', '02:38:50');
+insert into chapter values ('978-1408855652', 7, 'The Sorting Hat', '03:09:43');
+insert into chapter values ('978-1408855652', 8, 'The Potions Master',  '03:40:03');
+insert into chapter values ('978-1408855652', 9, 'The Midnight Due', '04:10:27');
+insert into chapter values ('978-1408855652', 10, 'Hallowe\'en','04:40:48');
+insert into chapter values ('978-1408855652', 11, 'Quidditch', '05:11:06');
+insert into chapter values ('978-1408855652', 12, 'The Mirror of Erised', '05:32:38');
+insert into chapter values ('978-1408855652', 13, 'Nicholas Flamel',  '06:11:56');
+insert into chapter values ('978-1408855652', 14, 'Norbert the Norwegian Ridgeback', '06:52:20');
+insert into chapter values ('978-1408855652', 15, 'The Forbidden Forest', '07:12:43');
+insert into chapter values ('978-1408855652', 16, 'Through the Trapdoor', '07:43:05');
+insert into chapter values ('978-1408855652', 17, 'The Man with Two Faces', '08:15:30');
+
+insert into audiobook_authors values (7 ,'860-1404211171');
+insert into audiobook_authors values (8 ,'860-1404211171');
+insert into audiobook_authors values (11 ,'978-0393957242');
+insert into audiobook_authors values (7 ,'978-1408855652');
+insert into audiobook_authors values (3 ,'978-0099457046');
+insert into audiobook_authors values (4 ,'978-1611749731');
+
+insert into audiobook_purchases values (3, '978-0099457046', '2018-10-23 21:34:02');
+insert into audiobook_purchases values (7, '978-0393957242', '2018-10-23 21:30:34');
+insert into audiobook_purchases values (5, '978-0393957242', '2018-10-23 21:35:54');
+insert into audiobook_purchases values (4, '978-0393957242', '2018-10-23 21:30:10');
+insert into audiobook_purchases values (7, '978-1408855652', '2018-10-23 21:31:08');
+insert into audiobook_purchases values (3, '978-1408855652', '2018-10-23 21:29:48');
+insert into audiobook_purchases values (9, '978-1611749731', '2018-10-23 21:30:47');
+
+insert into audiobook_reviews values (10, '860-1404211171', 2, 'Not as good as Harry Potter', 'Never read the book, seen the movie or listened to the audio book but I can tell you right now - its not as good as harry potter', false);
+insert into audiobook_reviews values (1, '860-1404211171', 4, 'Fantastic Book', 'Loved listening to this book before bed.', false);
+insert into audiobook_reviews values (7, '978-1408855652', 5, 'Best audio book EVER!', 'Best audio book I ever listened to. Stephen Fry does an excellent job reading the superb prose written by a genius author.', true);
+
+create view q1 as
+select
+ID as customer_ID,
+concat(forename, ' ', coalesce(concat(middle_initials, ' '), ''), surname) as full_name,
+email_address,
+coalesce(num_of_books, 0) as num_of_books,
+coalesce(total_money_spent, 0.00)  as total_money_spent
+from
+person
+natural join (select person_ID as ID, email_address from customer) as email_address_table
+natural left outer join (select customer_ID as ID, count(distinct ISBN) as num_of_books from audiobook_purchases group by customer_ID) as num_of_books_table
+natural left outer join (select customer_ID as ID, sum(purchase_price) as total_money_spent from audiobook_purchases natural left outer join audiobook group by customer_ID) as total_money_spent_table
+order by total_money_spent desc, surname asc, forename asc, middle_initials asc;
+
+create view q2 as
+select ISBN, title from audiobook where audiobook.ISBN not in (select ISBN from audiobook_purchases) order by title asc;
+
+create view q3 as
+select
+ID as customer_ID,
+concat(forename, ' ', coalesce(concat(middle_initials, ' '), ''), surname) as full_name,
+group_concat(title order by title SEPARATOR ', ') as book_name
+from
+person,
+(select contributor_ID as person_ID, title from audiobook_authors natural join audiobook where (contributor_ID, audiobook_authors.ISBN) in (select customer_ID as contributor_ID, ISBN from audiobook_purchases)
+union
+select customer_ID as person_ID, title from audiobook_purchases natural left outer join audiobook where customer_ID = narrator_id) as narrator_author_table
+where person.ID = narrator_author_table.person_ID
+group by ID;
+
+create view extension1 as
+select
+ISBN,
+title,
+publisher_name as publisher,
+count(ISBN) as num_of_purchase,
+sum(purchase_price) as total_sale
+from audiobook_purchases
+natural left outer join audiobook
+group by ISBN
+order by total_sale desc;
+
+DELIMITER $$
+create trigger book_review_validation
+before update on audiobook_reviews for each row
+begin
+if (new.rating > 5 or new.rating < 1) then
+signal sqlstate '45001' set message_text = 'Invalid rating field: out of range';
+elseif (new.customer_ID, new.ISBN) not in (select customer_ID, ISBN from audiobook_purchases) and new.verified = true then
+signal sqlstate '45002' set message_text = 'Invalid verified field: should be false';
+elseif (new.customer_ID, new.ISBN) in (select customer_ID, ISBN from audiobook_purchases) and new.verified = false then
+signal sqlstate '45003' set message_text = 'Invalid verified field: should be true';
+end if;
+end $$
+DELIMITER ;
+
+update audiobook_reviews set rating = 6 where customer_ID = 1;
+update audiobook_reviews set rating = 0 where customer_ID = 1;
+update audiobook_reviews set verified = true where customer_ID = 1;
+update audiobook_reviews set verified = false where customer_ID = 7;
+
+DELIMITER $$
+create trigger book_review_validation_update
+before update on audiobook_reviews for each row
+begin
+if (new.rating > 5 or new.rating < 1) then
+signal sqlstate '45001' set message_text = 'Invalid rating field: out of range';
+elseif (new.customer_ID, new.ISBN) not in (select customer_ID, ISBN from audiobook_purchases) and new.verified = true then
+signal sqlstate '45002' set message_text = 'Invalid verified field: should be false';
+elseif (new.customer_ID, new.ISBN) in (select customer_ID, ISBN from audiobook_purchases) and new.verified = false then
+signal sqlstate '45003' set message_text = 'Invalid verified field: should be true';
+end if;
+end $$
+DELIMITER ;
+
+DELIMITER $$
+create trigger book_review_validation_insert
+before insert on audiobook_reviews for each row
+begin
+if (new.rating > 5 or new.rating < 1) then
+signal sqlstate '45001' set message_text = 'Invalid rating field: out of range';
+elseif (new.customer_ID, new.ISBN) not in (select customer_ID, ISBN from audiobook_purchases) and new.verified = true then
+signal sqlstate '45002' set message_text = 'Invalid verified field: should be false';
+elseif (new.customer_ID, new.ISBN) in (select customer_ID, ISBN from audiobook_purchases) and new.verified = false then
+signal sqlstate '45003' set message_text = 'Invalid verified field: should be true';
+end if;
+end $$
+DELIMITER ;
+
+DELIMITER $$
+create trigger age_rating_enforcement
+before insert on audiobook_purchases for each row
+begin
+if new.customer_ID not in (select ID as customer_ID from person where floor(datediff(getdate(), date_of_birth)/365.25) < (select age_rating from audiobook where new.ISBN = audiobook.ISBN)) then
+signal sqlstate '45004' set message_text = 'Invalid purchase: violates age rating';
+end if;
+end $$
+DELIMITER ;
+
+DELIMITER $$
+create procedure insertCustomer(forename varchar(20), middle_initials varchar(20), surname varchar(20), date_of_birth date, email_address varchar(50))
+begin
+insert into person (forename, middle_initials, surname, date_of_birth) values (forename, middle_initials, surname, date_of_birth);
+insert into customer values (last_insert_id(), email_address);
+end $$
+DELIMITER ;
+
+call insertCustomer('test_customer', '1', 'test', '2011-12-10', 'customer@test.com');
+
+DELIMITER $$
+create procedure insertContributor(forename varchar(20), middle_initials varchar(20), surname varchar(20), date_of_birth date, biography varchar(1000))
+begin
+insert into person (forename, middle_initials, surname, date_of_birth) values (forename, middle_initials, surname, date_of_birth);
+insert into contributor values (last_insert_id(), biography);
+end $$
+DELIMITER ;
+
+call insertContributor('test_contributor', '2', 'test', '2010-11-11', 'contributor@test.com');
+
+DELIMITER $$
+create trigger block_person_direct_entry
+before insert on person for each row
+begin
+signal sqlstate '45005' set message_text = 'Invalid operation: direct entry/insert into person is prohibited';
+end $$
+DELIMITER ;
+
+insert into person (forename, middle_initials, surname, date_of_birth) values ('test_person_insert', '3', 'test', '2009-12-10');
+
+
+select
+ISBN,
+title,
+concat(forename, ' ', coalesce(concat(middle_initials, ' '), ''), surname) as narrator,
+running_time,
+age_rating,
+purchase_price,
+publisher_name,
+published_date
+from
+person,
+audiobook where person.ID = narrator_id;
+
+select
+concat(forename, ' ', coalesce(concat(middle_initials, ' '), ''), surname) as full_name,
+date_of_birth,
+biography
+from
+person,
+audiobook_authors,
+contributor
+where person.ID = audiobook_authors.contributor_ID and audiobook_authors.ISBN = '860-1404211171' and audiobook_authors.contributor_ID = contributor.person_ID;
